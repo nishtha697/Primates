@@ -1,5 +1,7 @@
 package sanctuary;
 
+import java.util.UUID;
+
 import enums.FavoriteFood;
 import enums.HealthStatus;
 import enums.MonkeySize;
@@ -11,12 +13,11 @@ import enums.Species;
  */
 public class Monkey implements Primate {
 
-  private static int monkeyNumber = 0;
-  private final String id;
+  private final UUID id;
   private final String name;
   private final Species species;
   private final Sex sex;
-  private final FavoriteFood favoriteFood;
+  private FavoriteFood favoriteFood;
   private MonkeySize size;
   private double weight;
   private int age;
@@ -53,6 +54,9 @@ public class Monkey implements Primate {
     if (weight <= 0) {
       throw new IllegalArgumentException("Monkey's weight cannot be negative or zero.");
     }
+    if (age <= 0) {
+      throw new IllegalArgumentException("Monkey's age cannot be negative or zero.");
+    }
     if (species == null) {
       throw new IllegalArgumentException("Monkey's species cannot be null.");
     }
@@ -62,8 +66,10 @@ public class Monkey implements Primate {
     if (favoriteFood == null) {
       throw new IllegalArgumentException("Monkey's favorite food cannot be null.");
     }
-    monkeyNumber += 1;
-    this.id = "MON" + monkeyNumber;
+    if (healthStatus == null) {
+      throw new IllegalArgumentException("Monkey's health status cannot be null.");
+    }
+    this.id = UUID.randomUUID();
     this.name = name;
     this.size = size;
     this.weight = weight;
@@ -75,7 +81,7 @@ public class Monkey implements Primate {
   }
 
   @Override
-  public String getId() {
+  public UUID getId() {
     return this.id;
   }
 
@@ -172,9 +178,23 @@ public class Monkey implements Primate {
    */
   void updateHealthStatus(HealthStatus updatedHealthStatus) throws IllegalArgumentException {
     if (updatedHealthStatus == null) {
-      throw new IllegalArgumentException("Monkey's updated health status or Monkey cannot be " +
+      throw new IllegalArgumentException("Monkey's updated health status cannot be " +
               "null.");
     }
     this.healthStatus = updatedHealthStatus;
   }
+
+  /**
+   * Updates the favorite food of the monkey.
+   *
+   * @param favoriteFood updated favorite food
+   * @throws IllegalArgumentException if {@code favoriteFood} is {@code null}.
+   */
+  void updateFavoriteFood(FavoriteFood favoriteFood){
+    if(favoriteFood == null){
+      throw new IllegalArgumentException("Monkey's updated favorite food cannot be " +
+              "null.");
+    }
+    this.favoriteFood = favoriteFood;
+    }
 }

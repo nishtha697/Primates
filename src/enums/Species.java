@@ -1,5 +1,6 @@
 package enums;
 
-public enum Species {
+public enum Species{
   MARMOSET, CAPUCHIN, HOWLER, NIGHT, SAKI, SPIDER, SQUIRREL, TAMARIN, TITI, UAKARIS, WOOLLY_SPIDER, WOOLLY;
+
 }

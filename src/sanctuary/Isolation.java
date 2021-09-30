@@ -2,25 +2,24 @@ package sanctuary;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 import enums.HousingType;
 import enums.Species;
 
 public class Isolation implements Housing{
 
-  private final String id;
+  private final UUID id;
   private Primate monkey;
-  private static int isolationNumber;
 
 
   public Isolation() {
-    this.isolationNumber += 1;
-    this.id = "ISO" + this.isolationNumber;
+    this.id = UUID.randomUUID();
     this.monkey = null;
   }
 
   @Override
-  public String getId() {
+  public UUID getId() {
     return id;
   }
 
@@ -47,7 +46,10 @@ public class Isolation implements Housing{
 
   @Override
   public List<Primate> getResidents() {
-    return Collections.singletonList(monkey);
+    if(monkey != null){
+      return Collections.singletonList(monkey);
+    }
+    return Collections.EMPTY_LIST;
   }
 
   @Override

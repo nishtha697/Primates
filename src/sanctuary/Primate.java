@@ -1,5 +1,7 @@
 package sanctuary;
 
+import java.util.UUID;
+
 import enums.FavoriteFood;
 import enums.HealthStatus;
 import enums.MonkeySize;
@@ -9,14 +11,14 @@ import enums.Species;
 /**
  * A sanctuary.Primate represents a new world primate that is housed in the sanctuary.
  */
-public interface Primate {
+public interface Primate{
 
   /**
    * Returns unique identifier for the primate. It will never be {@code null} or empty.
    *
    * @return id
    */
-  String getId();
+  UUID getId();
 
   /**
    * Returns the name for the primate. It will never be {@code null} or empty.

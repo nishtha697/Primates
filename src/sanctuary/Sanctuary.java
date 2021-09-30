@@ -2,6 +2,8 @@ package sanctuary;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
 
 import enums.FavoriteFood;
 import enums.HealthStatus;
@@ -12,37 +14,20 @@ import enums.Species;
 
 public interface Sanctuary {
 
-  public void addMonkey(String name, MonkeySize size, float weight, int age, Species species, Sex sex, FavoriteFood favoriteFood,
-                        HealthStatus healthStatus, String monkeyLocation);
-
-  public List<Primate> getMonkeys();
-
-  public void moveMonkey(String housingId, Primate monkey);
-
-  public List<Housing> getHousings();
-
-  public void removeMonkey(Primate monkey);
-
   public int getTotalNumOfIsolationCages();
 
   public int getTotalNumOfEnclosures();
 
-  public void moveMonkeyToIsolation(Primate monkey) throws UnsupportedOperationException;
+  public List<Housing> getHousings();
 
-  public void moveMonkeyToEnclosure(Primate monkey) throws UnsupportedOperationException;
+  public Set<UUID> getHousingIds();
 
-  public Map<Species, List<String>> getSpeciesWithLocations();
+  public void addCapacity(int numOfNewIsolationCages, int numOfNewEnclosures,
+                          int[] sizeOfEnclosures);
 
-  public List<String> getLocationsForSpecies(Species species);
-
-  public Map<String, Map<HousingType, String>> getAllMonkeysWithLocations();
-
-  public Map<FavoriteFood, Integer> getFavFoodShoppingList();
-
-  public void addCapacity(int numOfNewIsolationCages, int numOfNewEnclosures, int[] sizeOfEnclosures);
-
-  //implementation in enclosure
-  Map<String, Map<Sex, FavoriteFood>> getEnclosureSign(String enclosureId);
+  public Map<Primate, Housing> addMonkey(String name, MonkeySize size, double weight, int age, Species species,
+                                         Sex sex, FavoriteFood favoriteFood, HealthStatus healthStatus,
+                                         UUID monkeyLocation);
 
   public void updateMonkeyHealthStatus(HealthStatus updatedHealthStatus, Primate monkey);
 
@@ -52,5 +37,29 @@ public interface Sanctuary {
 
   public void updateMonkeyAge(int updatedAge, Primate monkey);
 
+  public void updateFavoriteFood(FavoriteFood favoriteFood, Primate monkey);
+
+  public void removeMonkey(Primate monkey);
+
+  public List<Primate> getMonkeys();
+
+  public List<UUID> getMonkeyIds();
+
   public List<Primate> getAlumniMonkeys();
+
+  public void moveMonkey(UUID housingId, Primate monkey);
+
+  public Housing moveMonkeyToIsolation(Primate monkey) throws UnsupportedOperationException;
+
+  public Housing moveMonkeyToEnclosure(Primate monkey) throws UnsupportedOperationException;
+
+  public Map<String, Map<Sex, FavoriteFood>> getEnclosureSign(UUID enclosureId);
+
+  public Map<String, Map<HousingType, UUID>> getAllMonkeysWithLocations();
+
+  public Map<Species, Map<HousingType, UUID>> getSpeciesWithLocations();
+
+  public Map<HousingType, UUID> getLocationsForASpecies(Species species);
+
+  public Map<FavoriteFood, Integer> getFavFoodShoppingList();
 }

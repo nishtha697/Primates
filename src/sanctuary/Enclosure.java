@@ -10,24 +10,23 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 public class Enclosure implements Housing{
 
   private List<Primate> troop;
   private final int capacity;
-  private static int enclosureNumber;
-  private final String id;
+  private final UUID id;
 
 
   public Enclosure(int capacity) {
-    this.enclosureNumber += 1;
-    this.id = "ENC" + this.enclosureNumber;
+    this.id = UUID.randomUUID();
     this.troop = new ArrayList<>();
     this.capacity = capacity;
   }
 
   @Override
-  public String getId() {
+  public UUID getId() {
     return this.id;
   }
 
@@ -35,10 +34,6 @@ public class Enclosure implements Housing{
   public List<Primate> getResidents()
   {
     return troop;
-  }
-
-   void removeMonkey(Primate monkey) {
-    troop.remove(monkey);
   }
 
   @Override
@@ -69,6 +64,10 @@ public class Enclosure implements Housing{
 
   void addMonkey(Primate monkey) {
     this.troop.add(monkey);
+  }
+
+  void removeMonkey(Primate monkey) {
+    troop.remove(monkey);
   }
 
   int getAvailableCapacity() {
