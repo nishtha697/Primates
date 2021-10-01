@@ -1,12 +1,13 @@
 package sanctuary;
 
+import java.util.Objects;
 import java.util.UUID;
 
-import enums.FavoriteFood;
-import enums.HealthStatus;
-import enums.MonkeySize;
-import enums.Sex;
-import enums.Species;
+import monkeyAttributes.FavoriteFood;
+import monkeyAttributes.HealthStatus;
+import monkeyAttributes.MonkeySize;
+import monkeyAttributes.Sex;
+import monkeyAttributes.Species;
 
 /**
  * Implements {@link Primate} and represents a monkey.
@@ -54,8 +55,8 @@ public class Monkey implements Primate {
     if (weight <= 0) {
       throw new IllegalArgumentException("Monkey's weight cannot be negative or zero.");
     }
-    if (age <= 0) {
-      throw new IllegalArgumentException("Monkey's age cannot be negative or zero.");
+    if (age < 0) {
+      throw new IllegalArgumentException("Monkey's age cannot be negative.");
     }
     if (species == null) {
       throw new IllegalArgumentException("Monkey's species cannot be null.");
@@ -197,4 +198,17 @@ public class Monkey implements Primate {
     }
     this.favoriteFood = favoriteFood;
     }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    Monkey monkey = (Monkey) o;
+    return id.equals(monkey.id);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(id);
+  }
 }

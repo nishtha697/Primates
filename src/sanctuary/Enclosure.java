@@ -1,25 +1,29 @@
 package sanctuary;
 
-import enums.FavoriteFood;
-import enums.HousingType;
-import enums.Sex;
-import enums.Species;
+import monkeyAttributes.FavoriteFood;
+import housingAttributes.HousingType;
+import monkeyAttributes.Sex;
+import monkeyAttributes.Species;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 
-public class Enclosure implements Housing{
+/**
+ * Implements {@link Housing} and represents an enclosure.
+ */
+class Enclosure implements Housing{
 
   private List<Primate> troop;
   private final int capacity;
   private final UUID id;
 
 
-  public Enclosure(int capacity) {
+   Enclosure(int capacity) {
     this.id = UUID.randomUUID();
     this.troop = new ArrayList<>();
     this.capacity = capacity;
@@ -91,5 +95,18 @@ public class Enclosure implements Housing{
       }
     }
     return sign;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    Enclosure enclosure = (Enclosure) o;
+    return id.equals(enclosure.id);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(id);
   }
 }

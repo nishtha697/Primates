@@ -1,15 +1,13 @@
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
-import enums.FavoriteFood;
-import enums.HealthStatus;
-import enums.MonkeySize;
-import enums.Sex;
-import enums.Species;
+import monkeyAttributes.FavoriteFood;
+import monkeyAttributes.HealthStatus;
+import monkeyAttributes.MonkeySize;
+import monkeyAttributes.Sex;
+import monkeyAttributes.Species;
 import sanctuary.Housing;
 import sanctuary.JungleFriendsSanctuary;
 import sanctuary.Primate;
@@ -19,31 +17,37 @@ public class Driver {
 
   public static void main(String[] args) {
 
-    Sanctuary jungle = new JungleFriendsSanctuary(8,5,
-            new int[]{48, 45, 56, 60, 64});
+    Sanctuary jungle = new JungleFriendsSanctuary(8, 5,
+            new int[]{10, 20, 15, 60, 80});
 
     System.out.println("Total Enclosures: " + jungle.getTotalNumOfEnclosures() + " Total Isolations: "
-             + jungle.getTotalNumOfIsolationCages());
-    Map<Primate, Housing> mon = new HashMap<>();
-try{
-   mon = jungle.addMonkey("Peter", MonkeySize.LARGE, 23, 10,Species.MARMOSET,
-          Sex.MALE, FavoriteFood.SEEDS, HealthStatus.UNHEALTHY, UUID.randomUUID());
-} catch(IllegalArgumentException e){
-  System.out.println("\n" + e);
-}
-    System.out.println("Monkey: " + mon);
+            + jungle.getTotalNumOfIsolationCages());
 
+    try {
+      jungle.addMonkey("Peter", MonkeySize.LARGE, 23, 10, Species.MARMOSET,
+              Sex.MALE, FavoriteFood.SEEDS, HealthStatus.UNHEALTHY, UUID.randomUUID());
+    } catch (IllegalArgumentException e) {
+      System.out.println("\n" + e);
+    }
 
-    Map<Primate, Housing> mon2 = jungle.addMonkey("Bruce", MonkeySize.LARGE, 45, 11, Species.MARMOSET,
+    try {
+      jungle.addMonkey("Peter", MonkeySize.LARGE, 23, 10, Species.MARMOSET,
+              Sex.MALE, FavoriteFood.SEEDS, HealthStatus.UNHEALTHY, jungle.getHousings().get(0)
+                      .getId());
+    } catch (IllegalArgumentException e) {
+      System.out.println("\n" + e);
+    }
+
+    Map<Primate, Housing> monkeyWithLocation = jungle.addMonkey("Bruce", MonkeySize.LARGE, 45, 11, Species.MARMOSET,
             Sex.MALE, FavoriteFood.FRUITS, HealthStatus.HEALTHY, jungle.getHousings().get(5).getId());
-    System.out.println("Monkey2: " + mon2);
+    Primate mon = monkeyWithLocation.keySet().iterator().next();
+    jungle.moveMonkeyToEnclosure(mon);
 
-
-    jungle.addMonkey("Robert", MonkeySize.MEDIUM, 15, 9, Species.SAKI,
+    jungle.addMonkey("Robert", MonkeySize.MEDIUM, 15, 9, Species.MARMOSET,
             Sex.MALE, FavoriteFood.EGGS, HealthStatus.HEALTHY, null);
-    jungle.addMonkey("Natalie", MonkeySize.SMALL, 30, 17, Species.TAMARIN,
+    jungle.addMonkey("Natalie", MonkeySize.SMALL, 30, 17, Species.MARMOSET,
             Sex.FEMALE, FavoriteFood.TREESAP, HealthStatus.HEALTHY, null);
-    jungle.addMonkey("Simon", MonkeySize.SMALL, 21, 9,Species.NIGHT,
+    jungle.addMonkey("Simon", MonkeySize.SMALL, 21, 9, Species.NIGHT,
             Sex.FEMALE, FavoriteFood.NUTS, HealthStatus.HEALTHY, null);
     jungle.addMonkey("Wanda", MonkeySize.MEDIUM, 22, 7, Species.HOWLER,
             Sex.FEMALE, FavoriteFood.LEAVES, HealthStatus.HEALTHY, null);
@@ -53,14 +57,12 @@ try{
     System.out.println(jungle.getSpeciesWithLocations());
 
     System.out.println("\nAll Locations: ");
-    for(Housing location : jungle.getHousings())
-    {
+    for (Housing location : jungle.getHousings()) {
       System.out.print(location.getId() + " ");
     }
 
     System.out.println("\nAll Monkeys: ");
-    for(Primate monkey : jungle.getMonkeys())
-    {
+    for (Primate monkey : jungle.getMonkeys()) {
       System.out.print(monkey.getName() + ":" + monkey.getId() + " ");
     }
 
@@ -93,18 +95,15 @@ try{
 //    }
 
 
-
     List<Primate> monkeys = jungle.getMonkeys();
 
     System.out.println("\nAll Locations: ");
-    for(Housing location : jungle.getHousings())
-    {
+    for (Housing location : jungle.getHousings()) {
       System.out.print(location.getId() + " ");
     }
 
     System.out.println("\nAll Monkeys: ");
-    for(Primate monkey : jungle.getMonkeys())
-    {
+    for (Primate monkey : jungle.getMonkeys()) {
       System.out.print(monkey.getId() + ":" + monkey.getName() + " ");
     }
 
@@ -112,14 +111,14 @@ try{
 
     try {
       jungle.moveMonkeyToEnclosure(monkeys.get(3));
-    } catch(IllegalStateException e){
+    } catch (IllegalStateException e) {
       System.out.println("\n" + e);
     }
 
     //Adding unhealthy monkey to Enclosure.
     try {
       jungle.moveMonkeyToEnclosure(monkeys.get(4));
-    } catch(IllegalStateException e){
+    } catch (IllegalStateException e) {
       System.out.println("\n" + e);
     }
 
@@ -133,10 +132,10 @@ try{
 //    jungle.moveMonkey("ENC2", monkeys.get(4));
 //    System.out.println("\nAll species with Locations: " + jungle.getAllMonkeysWithLocations());
 
-    try{
+    try {
       jungle.updateMonkeyHealthStatus(null, monkeys.get(4));
 
-    } catch(IllegalArgumentException e){
+    } catch (IllegalArgumentException e) {
       System.out.println("\n" + e);
     }
     System.out.println("\nAll species with Locations: " + jungle.getAllMonkeysWithLocations());
@@ -156,21 +155,19 @@ try{
     try {
       jungle.addMonkey("Karen", MonkeySize.LARGE, 44, 11, Species.NIGHT,
               Sex.FEMALE, FavoriteFood.NUTS, HealthStatus.HEALTHY, null);
-    } catch (IllegalStateException e){
+    } catch (IllegalStateException e) {
       System.out.println("\n" + e);
     }
 
     System.out.println("\nAll species with Locations: " + jungle.getAllMonkeysWithLocations());
 
     System.out.println("\nAll Monkeys: ");
-    for(Primate monkey : jungle.getMonkeys())
-    {
+    for (Primate monkey : jungle.getMonkeys()) {
       System.out.print(monkey.getId() + " ");
     }
     jungle.removeMonkey(monkeys.get(0));
     System.out.println("\nAll Monkeys: ");
-    for(Primate monkey : jungle.getMonkeys())
-    {
+    for (Primate monkey : jungle.getMonkeys()) {
       System.out.print(monkey.getId() + " ");
     }
 
@@ -197,7 +194,7 @@ try{
     try {
       jungle.updateMonkeySize(MonkeySize.LARGE, monkeys.get(0));
       System.out.println("Monkey size updated to " + MonkeySize.LARGE);
-    } catch (IllegalArgumentException e){
+    } catch (IllegalArgumentException e) {
       System.out.println("\n" + e);
     }
 

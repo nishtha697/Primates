@@ -4,12 +4,12 @@ import org.junit.Test;
 import java.util.Collections;
 import java.util.Map;
 
-import enums.FavoriteFood;
-import enums.HealthStatus;
-import enums.HousingType;
-import enums.MonkeySize;
-import enums.Sex;
-import enums.Species;
+import monkeyAttributes.FavoriteFood;
+import monkeyAttributes.HealthStatus;
+import housingAttributes.HousingType;
+import monkeyAttributes.MonkeySize;
+import monkeyAttributes.Sex;
+import monkeyAttributes.Species;
 import sanctuary.Housing;
 import sanctuary.JungleFriendsSanctuary;
 import sanctuary.Primate;
@@ -17,10 +17,13 @@ import sanctuary.Sanctuary;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-
+/**
+ * Tests for sanctuary.Enclosure.
+ */
 public class EnclosureTest {
   Sanctuary jungle;
   Primate monkey;
@@ -91,5 +94,15 @@ public class EnclosureTest {
   @Test
   public void getSpecies() {
     assertEquals(Species.MARMOSET, enclosure.getSpecies());
+  }
+
+  @Test
+  public void testEquals() {
+    Housing firstEnclosure = jungle.getHousings().get(0);
+    Housing secondEnclosure = jungle.getHousings().get(1);
+    Housing firstEnclosureCopy = firstEnclosure;
+
+    assertNotEquals(firstEnclosure, secondEnclosure);
+    assertEquals(firstEnclosure, firstEnclosureCopy);
   }
 }

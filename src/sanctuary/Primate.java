@@ -2,14 +2,14 @@ package sanctuary;
 
 import java.util.UUID;
 
-import enums.FavoriteFood;
-import enums.HealthStatus;
-import enums.MonkeySize;
-import enums.Sex;
-import enums.Species;
+import monkeyAttributes.FavoriteFood;
+import monkeyAttributes.HealthStatus;
+import monkeyAttributes.MonkeySize;
+import monkeyAttributes.Sex;
+import monkeyAttributes.Species;
 
 /**
- * A sanctuary.Primate represents a new world primate that is housed in the sanctuary.
+ * A sanctuary.Primate represents a new world primate that is/was housed in the sanctuary.
  */
 public interface Primate{
 
@@ -35,7 +35,7 @@ public interface Primate{
   MonkeySize getSize();
 
   /**
-   * Returns the weight of the primate in pounds. It will always be a positive value.
+   * Returns the weight of the primate in pounds. It will never be zero or negative.
    *
    * @return weight
    */
@@ -64,7 +64,7 @@ public interface Primate{
 
   /**
    * Returns the health status of the primate in {@link HealthStatus}. It will never be
-   * @code null}.
+   * {@code null}.
    *
    * @return health status
    */

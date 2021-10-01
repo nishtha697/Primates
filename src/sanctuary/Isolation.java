@@ -2,18 +2,22 @@ package sanctuary;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
-import enums.HousingType;
-import enums.Species;
+import housingAttributes.HousingType;
+import monkeyAttributes.Species;
 
-public class Isolation implements Housing{
+/**
+ * Implements {@link Housing} and represents an isolation.
+ */
+class Isolation implements Housing{
 
   private final UUID id;
   private Primate monkey;
 
 
-  public Isolation() {
+  Isolation() {
     this.id = UUID.randomUUID();
     this.monkey = null;
   }
@@ -63,5 +67,18 @@ public class Isolation implements Housing{
       return null;
     }
     return this.monkey.getSpecies();
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    Isolation isolation = (Isolation) o;
+    return id.equals(isolation.id);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(id);
   }
 }

@@ -3,11 +3,11 @@ import org.junit.Test;
 
 import java.util.Map;
 
-import enums.FavoriteFood;
-import enums.HealthStatus;
-import enums.MonkeySize;
-import enums.Sex;
-import enums.Species;
+import monkeyAttributes.FavoriteFood;
+import monkeyAttributes.HealthStatus;
+import monkeyAttributes.MonkeySize;
+import monkeyAttributes.Sex;
+import monkeyAttributes.Species;
 import sanctuary.Housing;
 import sanctuary.JungleFriendsSanctuary;
 import sanctuary.Primate;
@@ -16,7 +16,10 @@ import sanctuary.Sanctuary;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-public class MonkeyTest {
+/**
+ * Tests for {@link sanctuary.Primate}.
+ */
+public class PrimateTest {
 
   Sanctuary jungle;
   Primate monkey;
