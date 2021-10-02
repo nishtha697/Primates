@@ -1,7 +1,6 @@
 import org.junit.Before;
 import org.junit.Test;
 
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -10,14 +9,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
-import monkeyAttributes.FavoriteFood;
-import monkeyAttributes.HealthStatus;
-import housingAttributes.HousingType;
-import monkeyAttributes.MonkeySize;
-import monkeyAttributes.Sex;
-import monkeyAttributes.Species;
+import housing.attributes.HousingType;
+import monkey.attributes.FavoriteFood;
+import monkey.attributes.HealthStatus;
+import monkey.attributes.MonkeySize;
+import monkey.attributes.Sex;
+import monkey.attributes.Species;
 import sanctuary.Housing;
 import sanctuary.JungleFriendsSanctuary;
 import sanctuary.Primate;
@@ -172,6 +170,14 @@ public class JungleFriendsSanctuaryTest {
   public void testAddMonkeyWithNullMonkeySize() {
     jungle.addMonkey("Peter", null,
             23, 10,
+            Species.MARMOSET, Sex.MALE, FavoriteFood.SEEDS, HealthStatus.UNHEALTHY,
+            null);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testAddMonkeyWithNegativeAge() {
+    jungle.addMonkey("Peter", MonkeySize.LARGE,
+            10, -10,
             Species.MARMOSET, Sex.MALE, FavoriteFood.SEEDS, HealthStatus.UNHEALTHY,
             null);
   }
@@ -418,7 +424,8 @@ public class JungleFriendsSanctuaryTest {
 
   @Test(expected = IllegalArgumentException.class)
   public void testUpdateMonkeySizeNullMonkey() {
-    jungle.updateMonkeySize(MonkeySize.MEDIUM, null);
+    jungle.updateMonkeySize(MonkeySize.MEDIUM,
+            null);
   }
 
   @Test(expected = IllegalArgumentException.class)
@@ -479,7 +486,8 @@ public class JungleFriendsSanctuaryTest {
 
   @Test(expected = IllegalArgumentException.class)
   public void testUpdateMonkeyWeightNullMonkey() {
-    jungle.updateMonkeyWeight(25.7, null);
+    jungle.updateMonkeyWeight(25.7,
+            null);
   }
 
   @Test(expected = IllegalArgumentException.class)
@@ -689,8 +697,8 @@ public class JungleFriendsSanctuaryTest {
     try {
       jungle.moveMonkey(firstEnclosureId, monkey);
     } catch (IllegalArgumentException e) {
-      String message = "Monkey " + monkey.getName() + "(" + monkey.getId() +
-              ")does not exist in sanctuary";
+      String message = "Monkey " + monkey.getName() + "(" + monkey.getId()
+              + ")does not exist in sanctuary";
       assertEquals(message, e.getMessage());
       throw e;
     }
@@ -976,20 +984,26 @@ public class JungleFriendsSanctuaryTest {
 
     //creating expected data
     Map<HousingType, List<UUID>> expectedLocationMapForMarmoset = Collections.singletonMap(
-            HousingType.ISOLATION, Collections.singletonList(monkeyWithLocation.get(monkey).getId()));
+            HousingType.ISOLATION, Collections.singletonList(monkeyWithLocation.get(monkey)
+                    .getId()));
     Map<HousingType, List<UUID>> expectedLocationMapForSpider = Collections.singletonMap(
-            HousingType.ISOLATION, Collections.singletonList(monkey2WithLocation.get(monkey2).getId()));
+            HousingType.ISOLATION, Collections.singletonList(monkey2WithLocation.get(monkey2)
+                    .getId()));
     Map<HousingType, List<UUID>> expectedLocationMapForWoolly = new HashMap<>();
     List<UUID> woollyLocationUUIDList = new ArrayList<>();
     woollyLocationUUIDList.add(monkey3WithLocation.get(monkey3).getId());
-    expectedLocationMapForWoolly.put(HousingType.ISOLATION,woollyLocationUUIDList);
-    expectedLocationMapForWoolly.put(HousingType.ENCLOSURE,Collections.singletonList(enclosure.getId()));
+    expectedLocationMapForWoolly.put(HousingType.ISOLATION, woollyLocationUUIDList);
+    expectedLocationMapForWoolly.put(HousingType.ENCLOSURE, Collections.singletonList(enclosure
+            .getId()));
     Map<HousingType, List<UUID>> expectedLocationMapForCapuchin = Collections.singletonMap(
-            HousingType.ISOLATION, Collections.singletonList(monkey5WithLocation.get(monkey5).getId()));
+            HousingType.ISOLATION, Collections.singletonList(monkey5WithLocation.get(monkey5)
+                    .getId()));
     Map<HousingType, List<UUID>> expectedLocationMapForHowler = Collections.singletonMap(
-            HousingType.ISOLATION, Collections.singletonList(monkey6WithLocation.get(monkey6).getId()));
+            HousingType.ISOLATION, Collections.singletonList(monkey6WithLocation.get(monkey6)
+                    .getId()));
     Map<HousingType, List<UUID>> expectedLocationMapForNight = Collections.singletonMap(
-            HousingType.ISOLATION, Collections.singletonList(monkey7WithLocation.get(monkey7).getId()));
+            HousingType.ISOLATION, Collections.singletonList(monkey7WithLocation.get(monkey7)
+                    .getId()));
     Map<HousingType, List<UUID>> expectedLocationMapForSaki = Collections.singletonMap(
             HousingType.ENCLOSURE, Collections.singletonList(enclosure2.getId()));
     Map<HousingType, List<UUID>> expectedLocationMapForSquirrel = new HashMap<>();
@@ -1000,13 +1014,17 @@ public class JungleFriendsSanctuaryTest {
             .getId());
     expectedLocationMapForSquirrel.put(HousingType.ISOLATION, squirrelLocationUUIDList);
     Map<HousingType, List<UUID>> expectedLocationMapForTamarin = Collections.singletonMap(
-            HousingType.ISOLATION, Collections.singletonList(monkey10WithLocation.get(monkey10).getId()));
+            HousingType.ISOLATION, Collections.singletonList(monkey10WithLocation.get(monkey10)
+                    .getId()));
     Map<HousingType, List<UUID>> expectedLocationMapForTiti = Collections.singletonMap(
-            HousingType.ISOLATION, Collections.singletonList(monkey12WithLocation.get(monkey12).getId()));
+            HousingType.ISOLATION, Collections.singletonList(monkey12WithLocation.get(monkey12)
+                    .getId()));
     Map<HousingType, List<UUID>> expectedLocationMapForUakaris = Collections.singletonMap(
-            HousingType.ISOLATION, Collections.singletonList(monkey13WithLocation.get(monkey13).getId()));
+            HousingType.ISOLATION, Collections.singletonList(monkey13WithLocation.get(monkey13)
+                    .getId()));
     Map<HousingType, List<UUID>> expectedLocationMapForWoolySpider = Collections.singletonMap(
-            HousingType.ISOLATION, Collections.singletonList(monkey14WithLocation.get(monkey14).getId()));
+            HousingType.ISOLATION, Collections.singletonList(monkey14WithLocation.get(monkey14)
+                    .getId()));
 
 
     Map<Species, Map<HousingType, List<UUID>>> expectedAllSpeciesMap = new TreeMap<>(Comparator
@@ -1053,7 +1071,8 @@ public class JungleFriendsSanctuaryTest {
     locationMapsOrdered.add(expectedLocationMapForWoolySpider);
 
     // actual map
-    Map<Species, Map<HousingType, List<UUID>>> actualAllSpeciesMap = jungle.getSpeciesWithLocations();
+    Map<Species, Map<HousingType, List<UUID>>> actualAllSpeciesMap = jungle
+            .getSpeciesWithLocations();
 
     //test
     assertEquals(expectedAllSpeciesMap, actualAllSpeciesMap);
@@ -1100,7 +1119,7 @@ public class JungleFriendsSanctuaryTest {
     Map<HousingType, List<UUID>> expectedLocationMapForSquirrel = new HashMap<>();
     expectedLocationMapForSquirrel.put(HousingType.ISOLATION, Collections.singletonList(
             monkeyWithLocation.get(monkey)
-            .getId()));
+                    .getId()));
     expectedLocationMapForSquirrel.put(HousingType.ENCLOSURE, Collections.singletonList(
             enclosure.getId()));
 

@@ -1,10 +1,5 @@
 package sanctuary;
 
-import monkeyAttributes.FavoriteFood;
-import housingAttributes.HousingType;
-import monkeyAttributes.Sex;
-import monkeyAttributes.Species;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -13,17 +8,22 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
+import housing.attributes.HousingType;
+import monkey.attributes.FavoriteFood;
+import monkey.attributes.Sex;
+import monkey.attributes.Species;
+
 /**
  * Implements {@link Housing} and represents an enclosure.
  */
-class Enclosure implements Housing{
+public class Enclosure implements Housing {
 
-  private List<Primate> troop;
   private final int capacity;
   private final UUID id;
+  private final List<Primate> troop;
 
 
-   Enclosure(int capacity) {
+  Enclosure(int capacity) {
     this.id = UUID.randomUUID();
     this.troop = new ArrayList<>();
     this.capacity = capacity;
@@ -35,21 +35,18 @@ class Enclosure implements Housing{
   }
 
   @Override
-  public List<Primate> getResidents()
-  {
+  public List<Primate> getResidents() {
     return troop;
   }
 
   @Override
   public boolean isLocationAvailable(Primate monkey) {
-    if(monkey.getSize().getSpace() <= this.getAvailableCapacity() && this.getSpecies() == monkey.getSpecies())
-    {
+    if (monkey.getSize().getSpace() <= this.getAvailableCapacity() && this.getSpecies() == monkey
+            .getSpecies()) {
       return true;
-    } else if (this.getAvailableCapacity() == this.capacity)
-    {
-      return true;
+    } else {
+      return this.getAvailableCapacity() == this.capacity;
     }
-    return false;
   }
 
   @Override
@@ -58,12 +55,28 @@ class Enclosure implements Housing{
   }
 
   @Override
-  public Species getSpecies()
-  {
-    if(this.getResidents() == null || this.getResidents().isEmpty()){
+  public Species getSpecies() {
+    if (this.getResidents() == null || this.getResidents().isEmpty()) {
       return null;
     }
     return getResidents().get(0).getSpecies();
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (!(o instanceof Enclosure)) {
+      return false;
+    }
+    Enclosure enclosure = (Enclosure) o;
+    return id.toString().equals(enclosure.id.toString());
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(id);
   }
 
   void addMonkey(Primate monkey) {
@@ -76,8 +89,7 @@ class Enclosure implements Housing{
 
   int getAvailableCapacity() {
     int usedCapacity = 0;
-    if(this.troop == null || this.troop.isEmpty())
-    {
+    if (this.troop == null || this.troop.isEmpty()) {
       return this.capacity;
     }
     for (Primate monkey : this.troop) {
@@ -88,25 +100,12 @@ class Enclosure implements Housing{
 
   Map<String, Map<Sex, FavoriteFood>> getEnclosureSign() {
     Map<String, Map<Sex, FavoriteFood>> sign = new HashMap<>();
-    if(!this.getResidents().isEmpty()) {
+    if (!this.getResidents().isEmpty()) {
       for (Primate monkey : this.getResidents()) {
         sign.put(monkey.getName(), Collections.singletonMap(monkey.getSex(),
                 monkey.getFavoriteFood()));
       }
     }
     return sign;
-  }
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
-    Enclosure enclosure = (Enclosure) o;
-    return id.equals(enclosure.id);
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(id);
   }
 }

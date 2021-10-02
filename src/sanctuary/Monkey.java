@@ -3,11 +3,11 @@ package sanctuary;
 import java.util.Objects;
 import java.util.UUID;
 
-import monkeyAttributes.FavoriteFood;
-import monkeyAttributes.HealthStatus;
-import monkeyAttributes.MonkeySize;
-import monkeyAttributes.Sex;
-import monkeyAttributes.Species;
+import monkey.attributes.FavoriteFood;
+import monkey.attributes.HealthStatus;
+import monkey.attributes.MonkeySize;
+import monkey.attributes.Sex;
+import monkey.attributes.Species;
 
 /**
  * Implements {@link Primate} and represents a monkey.
@@ -126,6 +126,23 @@ public class Monkey implements Primate {
     return this.favoriteFood;
   }
 
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (!(o instanceof Monkey)) {
+      return false;
+    }
+    Monkey monkey = (Monkey) o;
+    return id.toString().equals(monkey.id.toString());
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(id.toString());
+  }
+
   /**
    * Updates the age of the monkey.
    *
@@ -134,8 +151,8 @@ public class Monkey implements Primate {
    */
   void updateAge(int age) throws IllegalArgumentException {
     if (age < this.getAge()) {
-      throw new IllegalArgumentException("Monkey's updated age cannot be less than existing age." +
-              " Updated age: " + age + ", Existing age: " + this.getAge());
+      throw new IllegalArgumentException("Monkey's updated age cannot be less than existing age."
+              + " Updated age: " + age + ", Existing age: " + this.getAge());
     }
     this.age = age;
   }
@@ -151,9 +168,9 @@ public class Monkey implements Primate {
       throw new IllegalArgumentException("Monkey's updated size cannot be null.");
     }
     if (size.getSpace() < this.getSize().getSpace()) {
-      throw new IllegalArgumentException("Invalid Size. Updated monkey size cannot be smaller " +
-              "than existing size. Updated size: " + size + ", Existing monkey size: " +
-              this.getSize());
+      throw new IllegalArgumentException("Invalid Size. Updated monkey size cannot be smaller "
+              + "than existing size. Updated size: " + size + ", Existing monkey size: "
+              + this.getSize());
     }
     this.size = size;
   }
@@ -179,8 +196,7 @@ public class Monkey implements Primate {
    */
   void updateHealthStatus(HealthStatus updatedHealthStatus) throws IllegalArgumentException {
     if (updatedHealthStatus == null) {
-      throw new IllegalArgumentException("Monkey's updated health status cannot be " +
-              "null.");
+      throw new IllegalArgumentException("Monkey's updated health status cannot be null.");
     }
     this.healthStatus = updatedHealthStatus;
   }
@@ -191,24 +207,10 @@ public class Monkey implements Primate {
    * @param favoriteFood updated favorite food
    * @throws IllegalArgumentException if {@code favoriteFood} is {@code null}.
    */
-  void updateFavoriteFood(FavoriteFood favoriteFood){
-    if(favoriteFood == null){
-      throw new IllegalArgumentException("Monkey's updated favorite food cannot be " +
-              "null.");
+  void updateFavoriteFood(FavoriteFood favoriteFood) {
+    if (favoriteFood == null) {
+      throw new IllegalArgumentException("Monkey's updated favorite food cannot be null.");
     }
     this.favoriteFood = favoriteFood;
-    }
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
-    Monkey monkey = (Monkey) o;
-    return id.equals(monkey.id);
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(id);
   }
 }

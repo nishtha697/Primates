@@ -1,4 +1,4 @@
-package housingAttributes;
+package housing.attributes;
 
 /**
  * Enum for monkey's housing type.

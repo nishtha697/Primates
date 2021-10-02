@@ -2,16 +2,16 @@ package sanctuary;
 
 import java.util.UUID;
 
-import monkeyAttributes.FavoriteFood;
-import monkeyAttributes.HealthStatus;
-import monkeyAttributes.MonkeySize;
-import monkeyAttributes.Sex;
-import monkeyAttributes.Species;
+import monkey.attributes.FavoriteFood;
+import monkey.attributes.HealthStatus;
+import monkey.attributes.MonkeySize;
+import monkey.attributes.Sex;
+import monkey.attributes.Species;
 
 /**
  * A sanctuary.Primate represents a new world primate that is/was housed in the sanctuary.
  */
-public interface Primate{
+public interface Primate {
 
   /**
    * Returns unique identifier for the primate. It will never be {@code null} or empty.

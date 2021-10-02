@@ -1,4 +1,4 @@
-package monkeyAttributes;
+package monkey.attributes;
 
 /**
  * Enum for monkey's size. Small monkeys (smaller than 10 cm) , medium monkeys (10 to 20 cm), and
@@ -16,8 +16,7 @@ public enum MonkeySize {
    * @param space the space required by monkey in meter square.
    * @param foodRequired the food required by monkey in grams.
    */
-  MonkeySize(int space, int foodRequired)
-  {
+  MonkeySize(int space, int foodRequired) {
     this.space = space;
     this.foodRequired = foodRequired;
   }
@@ -27,8 +26,7 @@ public enum MonkeySize {
    * for MEDIUM. 10 square meter for LARGE.
    * @return space required.
    */
-  public int getSpace()
-  {
+  public int getSpace() {
     return this.space;
   }
 
@@ -37,7 +35,7 @@ public enum MonkeySize {
    * for LARGE.
    * @return the food required.
    */
-  public int getFoodRequired(){
+  public int getFoodRequired() {
     return this.foodRequired;
   }
 }

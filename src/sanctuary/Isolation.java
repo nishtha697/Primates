@@ -5,13 +5,13 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
-import housingAttributes.HousingType;
-import monkeyAttributes.Species;
+import housing.attributes.HousingType;
+import monkey.attributes.Species;
 
 /**
  * Implements {@link Housing} and represents an isolation.
  */
-class Isolation implements Housing{
+public class Isolation implements Housing {
 
   private final UUID id;
   private Primate monkey;
@@ -27,30 +27,16 @@ class Isolation implements Housing{
     return id;
   }
 
-   void addMonkey(Primate monkey) {
-    this.monkey = monkey;
-  }
-
-  void removeMonkey(Primate monkey) {
-    if (this.monkey.getId().equals(monkey.getId())) {
-      this.monkey = null;
-    }
-  }
-
   @Override
   public boolean isLocationAvailable(Primate monkey) {
 
-    if(this.getResidents() == null || this.getResidents().isEmpty()
-            || this.getResidents().get(0) == null)
-    {
-      return true;
-    }
-    return false;
+    return this.getResidents() == null || this.getResidents().isEmpty()
+            || this.getResidents().get(0) == null;
   }
 
   @Override
   public List<Primate> getResidents() {
-    if(monkey != null){
+    if (monkey != null) {
       return Collections.singletonList(monkey);
     }
     return Collections.EMPTY_LIST;
@@ -62,8 +48,8 @@ class Isolation implements Housing{
   }
 
   @Override
-  public Species getSpecies(){
-    if(this.monkey == null){
+  public Species getSpecies() {
+    if (this.monkey == null) {
       return null;
     }
     return this.monkey.getSpecies();
@@ -71,14 +57,28 @@ class Isolation implements Housing{
 
   @Override
   public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
+    if (this == o) {
+      return true;
+    }
+    if (!(o instanceof Isolation)) {
+      return false;
+    }
     Isolation isolation = (Isolation) o;
-    return id.equals(isolation.id);
+    return id.toString().equals(isolation.id.toString());
   }
 
   @Override
   public int hashCode() {
     return Objects.hash(id);
+  }
+
+  void addMonkey(Primate monkey) {
+    this.monkey = monkey;
+  }
+
+  void removeMonkey(Primate monkey) {
+    if (this.monkey.getId().equals(monkey.getId())) {
+      this.monkey = null;
+    }
   }
 }

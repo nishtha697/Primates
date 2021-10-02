@@ -5,12 +5,12 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-import monkeyAttributes.FavoriteFood;
-import monkeyAttributes.HealthStatus;
-import housingAttributes.HousingType;
-import monkeyAttributes.MonkeySize;
-import monkeyAttributes.Sex;
-import monkeyAttributes.Species;
+import housing.attributes.HousingType;
+import monkey.attributes.FavoriteFood;
+import monkey.attributes.HealthStatus;
+import monkey.attributes.MonkeySize;
+import monkey.attributes.Sex;
+import monkey.attributes.Species;
 
 /**
  * The sanctuary.Sanctuary represents data for various sanctuaries that provide care for primates.
@@ -56,8 +56,8 @@ public interface Sanctuary {
    *                               enclosure.
    * @throws IllegalArgumentException <ul><li>if {@code numOfNewIsolationCages} is negative.</li>
    *                                  <li>if {@code numOfNewEnclosures} is negative.</li>
-   *                                  <li>if the length of {@code sizeOfEnclosures} is not equal to size
-   *                                  of {@code numOfNewEnclosures}.</li>
+   *                                  <li>if the length of {@code sizeOfEnclosures} is not equal to
+   *                                  size of {@code numOfNewEnclosures}.</li>
    *                                  <li>if any element of {@code sizeOfEnclosures} is zero or
    *                                  negative.</li></ul>
    */
@@ -80,7 +80,7 @@ public interface Sanctuary {
    *                     If it is not a valid isolation cage id or if the location is already
    *                     occupied, monkey will be housed to any available isolation cage.
    * @return a {@link Map} of {@link Primate}(representing the new monkey) and {@link Housing}(the
-   * location where monkey is housed). This returns an empty map in case of an exception.
+   *         location where monkey is housed). This returns an empty map in case of an exception.
    * @throws IllegalArgumentException <ul><li>if {@code name} is {@code null} or empty.</li>
    *                                  <li>if {@code size} is {@code null}.</li>
    *                                  <li>if {@code weight} is zero or negative.</li>
@@ -93,9 +93,9 @@ public interface Sanctuary {
    * @throws IllegalStateException    <ul><li>if {@code isolationId} is already occupied.</li>
    *                                  <li>if all isolation cages are occupied.</li></ul>
    */
-  Map<Primate, Housing> addMonkey(String name, MonkeySize size, double weight, int age, Species species,
-                                  Sex sex, FavoriteFood favoriteFood, HealthStatus healthStatus,
-                                  UUID isolationId);
+  Map<Primate, Housing> addMonkey(String name, MonkeySize size, double weight, int age,
+                                  Species species, Sex sex, FavoriteFood favoriteFood,
+                                  HealthStatus healthStatus, UUID isolationId);
 
   /**
    * Updates the {@link Primate}'s {@link HealthStatus}.
@@ -104,7 +104,8 @@ public interface Sanctuary {
    * automatically moved to an available isolation cage.
    *
    * @param updatedHealthStatus the new health status to be updated. This cannot be {@code null}.
-   * @param monkey              the monkey whose health status need to be updated. This cannot be {@code null}.
+   * @param monkey              the monkey whose health status need to be updated. This cannot be
+   *                            {@code null}.
    * @throws IllegalArgumentException <ul><li>if {@code updatedHealthStatus} is {@code null}.</li>
    *                                  <li>if {@code monkey} is {@code null}.</li></ul>
    * @throws IllegalStateException    If no more isolation cages are available to house the updated
@@ -141,7 +142,8 @@ public interface Sanctuary {
   /**
    * Updates the {@link Primate}'s age.
    *
-   * @param updatedAge the new age(in years) to be updated. This cannot be less than the current age.
+   * @param updatedAge the new age(in years) to be updated. This cannot be less than the current
+   *                   age.
    * @param monkey     the monkey whose age need to be updated. This cannot be
    *                   {@code null}.
    * @throws IllegalArgumentException <ul><li>if {@code updatedAge} is less than current age.</li>
@@ -167,7 +169,8 @@ public interface Sanctuary {
    * @param monkey the monkey that needs to be removed. This cannot be
    *               {@code null}.
    * @throws IllegalArgumentException <ul><li>if {@code monkey} is {@code null}.</li>
-   *                                  <li>if {@code monkey} does not exist in the sanctuary.</li></ul>
+   *                                  <li>if {@code monkey} does not exist in the
+   *                                  sanctuary.</li></ul>
    */
   void removeMonkey(Primate monkey);
 
@@ -203,8 +206,10 @@ public interface Sanctuary {
    *                                  <li>if {@code monkey} is {@code null}.</li>
    *                                  <li>if {@code housingId} does not exist in sanctuary.</li>
    *                                  <li>if {@code monkey} does not exist in sanctuary.</li></ul>
-   * @throws IllegalStateException    <ul><li>if unhealthy monkey is tried to move to enclosure.</li>
-   *                                  <li>if {@code housingId} location cannot accommodate {@code monkey}.</li></ul>
+   * @throws IllegalStateException    <ul><li>if unhealthy monkey is tried to move to
+   *                                  enclosure.</li>
+   *                                  <li>if {@code housingId} location cannot accommodate
+   *                                  {@code monkey}.</li></ul>
    */
   void moveMonkey(UUID housingId, Primate monkey);
 
@@ -213,7 +218,7 @@ public interface Sanctuary {
    *
    * @param monkey the monkey to be moved. This cannot be {@code null}.
    * @return the {@link Housing} isolation the {@code monkey} is moved to. This can be {@code null}
-   * if monkey is not moved to any isolation(in case of exceptions).
+   *          if monkey is not moved to any isolation(in case of exceptions).
    * @throws IllegalArgumentException <ul><li>if {@code monkey} is {@code null}.</li>
    *                                  <li>if {@code monkey} does not exist in sanctuary.</li></ul>
    * @throws IllegalStateException    if no more isolation cages are left.
@@ -225,11 +230,13 @@ public interface Sanctuary {
    *
    * @param monkey the monkey to be moved. This cannot be {@code null}.
    * @return the {@link Housing} enclosure the {@code monkey} is moved to. This can be {@code null}
-   * if monkey is not moved to any enclosure(in case of exceptions).
+   *          if monkey is not moved to any enclosure(in case of exceptions).
    * @throws IllegalArgumentException <ul><li>if {@code monkey} is {@code null}.</li>
    *                                  <li>if {@code monkey} does not exist in sanctuary.</li></ul>
-   * @throws IllegalStateException    <ul><li>if no enclosure that can house {@code monkey} is left.</li>
-   *                                  <li>if unhealthy monkey is tried to move to enclosure.</li></ul>
+   * @throws IllegalStateException    <ul><li>if no enclosure that can house {@code monkey} is
+   *                                  left.</li>
+   *                                  <li>if unhealthy monkey is tried to move to
+   *                                  enclosure.</li></ul>
    */
   Housing moveMonkeyToEnclosure(Primate monkey) throws UnsupportedOperationException;
 
@@ -242,7 +249,8 @@ public interface Sanctuary {
    *                    there. This will never be {@code null}.
    * @return the map of primate's name with map of its sex and favorite food.
    * @throws IllegalArgumentException <ul><li>if {@code enclosureId} is {@code null}.</li>
-   * <li> if {@code enclosureId} does not exist in sanctuary.</li></ul>
+   *                                  <li> if {@code enclosureId} does not exist in
+   *                                  sanctuary.</li></ul>
    */
   Map<String, Map<Sex, FavoriteFood>> getEnclosureSign(UUID enclosureId);
 
@@ -251,7 +259,7 @@ public interface Sanctuary {
    * with the {@link Map} of its {@link HousingType} and housing {@link UUID}.
    *
    * @return primate's name with map of its housing type and location id.Returns an empty map in
-   * case of no primate living in the sanctuary. This will never be {@code null}.
+   *         case of no primate living in the sanctuary. This will never be {@code null}.
    */
   Map<String, Map<HousingType, UUID>> getAllMonkeysWithLocations();
 
@@ -259,13 +267,15 @@ public interface Sanctuary {
    * Gets an alphabetical {@link Map} of all the {@link Species}s housed in the Sanctuary
    * with the {@link Map} of its {@link HousingType} and housing {@link UUID}.
    *
-   * @return a map of species with map of its housing type and location id. This will never be {@code null}.
+   * @return a map of species with map of its housing type and location id. This will never be
+   * {@code null}.
    */
   Map<Species, Map<HousingType, List<UUID>>> getSpeciesWithLocations();
 
   /**
    * Gets a {@link Map} of all locations(housing type and id) where a particular {@link Species} is
    * currently housed. This will never be {@code null}.
+   *
    * @param species the species of primate.
    * @return a map of housing type with its id.
    */
@@ -274,6 +284,7 @@ public interface Sanctuary {
   /**
    * Gets the shopping list of all {@link FavoriteFood}s of the inhabitants of the sanctuary with
    * its quantity in grams.
+   *
    * @return the map of favorite food and its quantity in grams. This will never be {@code null}.
    */
   Map<FavoriteFood, Integer> getFavFoodShoppingList();

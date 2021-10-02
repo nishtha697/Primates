@@ -1,4 +1,4 @@
-package monkeyAttributes;
+package monkey.attributes;
 
 /**
  * Enum for monkey's health status.

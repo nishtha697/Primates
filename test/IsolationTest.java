@@ -4,13 +4,14 @@ import org.junit.Test;
 import java.util.Collections;
 import java.util.Map;
 
-import monkeyAttributes.FavoriteFood;
-import monkeyAttributes.HealthStatus;
-import housingAttributes.HousingType;
-import monkeyAttributes.MonkeySize;
-import monkeyAttributes.Sex;
-import monkeyAttributes.Species;
+import housing.attributes.HousingType;
+import monkey.attributes.FavoriteFood;
+import monkey.attributes.HealthStatus;
+import monkey.attributes.MonkeySize;
+import monkey.attributes.Sex;
+import monkey.attributes.Species;
 import sanctuary.Housing;
+import sanctuary.Isolation;
 import sanctuary.JungleFriendsSanctuary;
 import sanctuary.Primate;
 import sanctuary.Sanctuary;
@@ -23,7 +24,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 /**
- * Tests for sanctuary.Isolation.
+ * Tests for {@link sanctuary.Isolation}.
  */
 public class IsolationTest {
 
@@ -32,7 +33,7 @@ public class IsolationTest {
   Housing isolation;
 
   @Before
-  public void setUp(){
+  public void setUp() {
     jungle = new JungleFriendsSanctuary(2, 1, new int[]{15});
     Map<Primate, Housing> monkeyWithLocation = jungle.addMonkey("Peter", MonkeySize.LARGE,
             23.8, 10,
@@ -89,10 +90,25 @@ public class IsolationTest {
   @Test
   public void testEquals() {
     Housing firstIsolation = jungle.getHousings().get(jungle.getTotalNumOfEnclosures());
-    Housing secondIsolation = jungle.getHousings().get(jungle.getTotalNumOfEnclosures()+1);
+    Housing secondIsolation = jungle.getHousings().get(jungle.getTotalNumOfEnclosures() + 1);
+    Housing firstEnclosure = jungle.getHousings().get(0);
+
     Housing firstIsolationCopy = firstIsolation;
 
     assertNotEquals(firstIsolation, secondIsolation);
     assertEquals(firstIsolation, firstIsolationCopy);
+    assertNotEquals(firstIsolation, firstEnclosure);
+  }
+
+  @Test
+  public void testHashCode() {
+    Isolation firstIsolation = (Isolation) jungle.getHousings().get(
+            jungle.getTotalNumOfEnclosures());
+    Isolation secondIsolation = (Isolation) jungle.getHousings().get(
+            jungle.getTotalNumOfEnclosures() + 1);
+    Housing firstIsolationCopy = firstIsolation;
+
+    assertNotEquals(firstIsolation.hashCode(), secondIsolation.hashCode());
+    assertEquals(firstIsolation.hashCode(), firstIsolationCopy.hashCode());
   }
 }

@@ -13,12 +13,12 @@ import java.util.TreeMap;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import monkeyAttributes.FavoriteFood;
-import monkeyAttributes.HealthStatus;
-import housingAttributes.HousingType;
-import monkeyAttributes.MonkeySize;
-import monkeyAttributes.Sex;
-import monkeyAttributes.Species;
+import housing.attributes.HousingType;
+import monkey.attributes.FavoriteFood;
+import monkey.attributes.HealthStatus;
+import monkey.attributes.MonkeySize;
+import monkey.attributes.Sex;
+import monkey.attributes.Species;
 
 /**
  * This class implements the interface {@link Sanctuary} and represents a sanctuary that provides
@@ -35,19 +35,21 @@ public class JungleFriendsSanctuary implements Sanctuary {
 
   /**
    * Constructs the JungleFriendsSanctuary.
+   *
    * @param numOfIsolationCages number of isolation cages. This cannot be zero or negative.
-   * @param numOfEnclosures number of enclosures. This cannot be zero or negative.
-   * @param sizeOfEnclosures size of enclosures. This should be an array of size
-   * {@code numberOfEnclosures} and all the values must be greater than 0.
+   * @param numOfEnclosures     number of enclosures. This cannot be zero or negative.
+   * @param sizeOfEnclosures    size of enclosures. This should be an array of size
+   *                            {@code numberOfEnclosures} and all the values must be greater than
+   *                            0.
    */
   public JungleFriendsSanctuary(int numOfIsolationCages, int numOfEnclosures,
                                 int[] sizeOfEnclosures) {
-    if (numOfEnclosures <= 0 || numOfIsolationCages <= 0){
+    if (numOfEnclosures <= 0 || numOfIsolationCages <= 0) {
       throw new IllegalArgumentException("Number of isolation cages or enclosures cannot be less "
               + "than or equal to 0");
     }
-    if(sizeOfEnclosures.length != numOfEnclosures || Arrays.stream(sizeOfEnclosures).anyMatch(
-            value -> value <= 0)){
+    if (sizeOfEnclosures.length != numOfEnclosures || Arrays.stream(sizeOfEnclosures)
+            .anyMatch(value -> value <= 0)) {
       throw new IllegalArgumentException("Size of enclosures should be an array of size "
               + numOfEnclosures + " and all the values must be greater than 0.");
     }
@@ -84,13 +86,13 @@ public class JungleFriendsSanctuary implements Sanctuary {
 
   @Override
   public void addCapacity(int numOfNewIsolationCages, int numOfNewEnclosures,
-                          int[] sizeOfEnclosures) throws IllegalArgumentException{
-    if(numOfNewIsolationCages < 0 || numOfNewEnclosures < 0){
+                          int[] sizeOfEnclosures) throws IllegalArgumentException {
+    if (numOfNewIsolationCages < 0 || numOfNewEnclosures < 0) {
       throw new IllegalArgumentException("Number of new isolation cages or number of new enclosures"
-            + " cannot be less than 0.");
+              + " cannot be less than 0.");
     }
-    if(sizeOfEnclosures.length != numOfNewEnclosures || Arrays.stream(sizeOfEnclosures).anyMatch(
-            value -> value <= 0)){
+    if (sizeOfEnclosures.length != numOfNewEnclosures || Arrays.stream(sizeOfEnclosures)
+            .anyMatch(value -> value <= 0)) {
       throw new IllegalArgumentException("Size of enclosures should be an array of size "
               + numOfNewEnclosures + " and all the values must be greater than 0.");
     }
@@ -101,34 +103,39 @@ public class JungleFriendsSanctuary implements Sanctuary {
   }
 
   @Override
-  public Map<Primate, Housing> addMonkey(String name, MonkeySize size, double weight, int age, Species species,
-                                         Sex sex, FavoriteFood favoriteFood, HealthStatus healthStatus,
-                                         UUID isolationId) throws IllegalArgumentException, IllegalStateException {
+  public Map<Primate, Housing> addMonkey(String name, MonkeySize size, double weight, int age,
+                                         Species species, Sex sex, FavoriteFood favoriteFood,
+                                         HealthStatus healthStatus, UUID isolationId)
+          throws IllegalArgumentException, IllegalStateException {
     Primate newMonkey;
     Housing isolation;
 
-    if (isIsolationCageAvailable(null) != null) { //checking if any isolation cages are available
-      if (isolationId != null){
+    //checking if any isolation cages are available
+    if (isIsolationCageAvailable(null) != null) {
+      if (isolationId != null) {
         isolation = this.getHousings().stream().filter(location ->
-                location.getId() == isolationId).findFirst().orElse(null);
-        if(isolation == null || isolation.getHousingType() != HousingType.ISOLATION) {
-        throw new IllegalArgumentException("Monkey not added to the sanctuary. The housing id "
-                + isolationId + "is not a valid isolation cage id.");
-        } else if(!isolation.getResidents().isEmpty()){
+                        location.getId().toString().equals(isolationId.toString())).findFirst()
+                .orElse(null);
+        if (isolation == null || isolation.getHousingType() != HousingType.ISOLATION) {
+          throw new IllegalArgumentException("Monkey not added to the sanctuary. The housing id "
+                  + isolationId + "is not a valid isolation cage id.");
+        } else if (!isolation.getResidents().isEmpty()) {
           throw new IllegalStateException("Monkey not added to the sanctuary. The isolation cage "
                   + isolationId + " is occupied. Try again with another isolation cage.");
         }
         newMonkey = new Monkey(name, size, weight, age, species, sex, favoriteFood, healthStatus);
         this.monkeys.add(newMonkey);
-        ((Isolation)isolation).addMonkey(newMonkey);
+        ((Isolation) isolation).addMonkey(newMonkey);
       } else {
         newMonkey = new Monkey(name, size, weight, age, species, sex, favoriteFood, healthStatus);
         this.monkeys.add(newMonkey);
         isolation = moveMonkeyToIsolation(newMonkey);
       }
-    } else throw new IllegalStateException("No more isolation cages available. New monkey cannot "
-            + "be added to the sanctuary. Please use exchange agreements to find a suitable home "
-            + "for this monkey.");
+    } else {
+      throw new IllegalStateException("No more isolation cages available. New monkey cannot "
+              + "be added to the sanctuary. Please use exchange agreements to find a suitable home "
+              + "for this monkey.");
+    }
     return Collections.singletonMap(newMonkey, isolation);
   }
 
@@ -144,7 +151,7 @@ public class JungleFriendsSanctuary implements Sanctuary {
         if (housing.getHousingType() == HousingType.ENCLOSURE
                 && !housing.getResidents().isEmpty()) {
           for (Primate resident : housing.getResidents()) {
-            if (resident.getId().equals(monkey.getId())) {
+            if (resident.equals(monkey)) {
               shouldMonkeyMoveToIsolation = true;
               currentHousing = housing;
             }
@@ -177,13 +184,15 @@ public class JungleFriendsSanctuary implements Sanctuary {
           try {
             this.moveMonkeyToEnclosure(monkey);
           } catch (IllegalStateException e) {
-            if (e.getMessage().equals("No space left in Enclosures. Cannot house anymore "
-                    + "monkeys.")) {
+            if (e.getMessage().equals("No space left in Enclosures for " + monkey.getId()
+            )) {
               this.removeMonkeyFromCurrentLocation(monkey);
               throw new IllegalStateException("Monkey size increased and no more space left for "
                       + "monkey in any Enclosures. Please find a suitable place for monkey "
                       + monkey.getName() + "(" + monkey.getId() + ")using exchange agreement");
-            } else throw e;
+            } else {
+              throw e;
+            }
           }
         }
       }
@@ -206,21 +215,21 @@ public class JungleFriendsSanctuary implements Sanctuary {
 
   @Override
   public void updateFavoriteFood(FavoriteFood favoriteFood, Primate monkey)
-          throws IllegalArgumentException{
+          throws IllegalArgumentException {
     this.nullCheck(monkey, "Monkey");
     ((Monkey) monkey).updateFavoriteFood(favoriteFood);
   }
 
   @Override
-  public void removeMonkey(Primate monkey) throws IllegalArgumentException{
+  public void removeMonkey(Primate monkey) throws IllegalArgumentException {
     this.nullCheck(monkey, "Monkey");
     if (this.getMonkeys().stream()
-            .noneMatch(mon -> mon.getId().equals(monkey.getId()))) {
-      throw new IllegalArgumentException("Monkey " + monkey.getName() + "(" + monkey.getId() +
-              ") does not exist in sanctuary.");
+            .noneMatch(mon -> mon.equals(monkey))) {
+      throw new IllegalArgumentException("Monkey " + monkey.getName() + "(" + monkey.getId()
+              + ") does not exist in sanctuary.");
     }
     this.removeMonkeyFromCurrentLocation(monkey);
-    this.monkeys.removeIf(mon -> mon.getId().toString().equals(monkey.getId().toString()));
+    this.monkeys.removeIf(mon -> mon.equals(monkey));
     this.alumniMonkeys.add(monkey);
   }
 
@@ -246,11 +255,11 @@ public class JungleFriendsSanctuary implements Sanctuary {
           IllegalArgumentException {
     this.nullCheck(housingId, "Housing id");
     this.nullCheck(monkey, "Monkey");
-    Housing housing = this.locations.stream().filter(house -> house.getId().equals(housingId))
-            .findFirst().orElse(null);
+    Housing housing = this.locations.stream().filter(house -> house.getId().toString()
+            .equals(housingId.toString())).findFirst().orElse(null);
     if (housing == null) {
-      throw new IllegalArgumentException(housingId + " : Location does not exist. Move monkey " +
-              monkey.getName() + "(" + monkey.getId() + ") to valid location.");
+      throw new IllegalArgumentException(housingId + " : Location does not exist. Move monkey "
+              + monkey.getName() + "(" + monkey.getId() + ") to valid location.");
     }
     if (housing.isLocationAvailable(monkey)) {
       this.checkIfUnhealthyMonkeyBeingMovedToEnclosure(housing, monkey);
@@ -261,9 +270,10 @@ public class JungleFriendsSanctuary implements Sanctuary {
       } else if (housing.getHousingType() == HousingType.ISOLATION) {
         ((Isolation) housing).addMonkey(monkey);
       }
-    } else
-      throw new IllegalStateException("The location " + housingId + " is not available for " +
-              monkey.getName() + "(" + monkey.getId() + "). Try another location.");
+    } else {
+      throw new IllegalStateException("The location " + housingId + " is not available for "
+              + monkey.getName() + "(" + monkey.getId() + "). Try another location.");
+    }
   }
 
   @Override
@@ -276,8 +286,8 @@ public class JungleFriendsSanctuary implements Sanctuary {
       this.removeMonkeyFromCurrentLocation(monkey);
       isolation.addMonkey(monkey);
     } else {
-      throw new IllegalStateException("No more Isolation cages left. Cannot house anymore " +
-              "monkeys.");
+      throw new IllegalStateException("No more Isolation cages left. Cannot house "
+              + monkey.getId());
     }
     return isolation;
   }
@@ -293,20 +303,21 @@ public class JungleFriendsSanctuary implements Sanctuary {
       this.removeMonkeyFromCurrentLocation(monkey);
       enclosure.addMonkey(monkey);
     } else {
-      throw new IllegalStateException("No space left in Enclosures. Cannot house anymore monkeys.");
+      throw new IllegalStateException("No space left in Enclosures for "
+              + monkey.getId());
     }
     return enclosure;
   }
 
   @Override
   public Map<String, Map<Sex, FavoriteFood>> getEnclosureSign(UUID enclosureId)
-          throws IllegalArgumentException{
+          throws IllegalArgumentException {
     this.nullCheck(enclosureId, "Enclosure id");
     boolean validEnclosureId = false;
     Map<String, Map<Sex, FavoriteFood>> enclosureSign = new HashMap<>();
     for (Housing location : this.getHousings()) {
-      if (location.getId().equals(enclosureId) && location.getHousingType() ==
-              HousingType.ENCLOSURE) {
+      if (location.getId().toString().equals(enclosureId.toString()) && location.getHousingType()
+              == HousingType.ENCLOSURE) {
         enclosureSign = ((Enclosure) location).getEnclosureSign();
         validEnclosureId = true;
       }
@@ -431,6 +442,8 @@ public class JungleFriendsSanctuary implements Sanctuary {
             addSpeciesLocationsToMap(location, woollySpiderIsolationList, woollySpiderEnclosureList,
                     woollySpiderLocations);
             break;
+
+          default: //No default case.
         }
       }
       speciesWithLocations.put(Species.MARMOSET, marmosetLocations);
@@ -449,21 +462,9 @@ public class JungleFriendsSanctuary implements Sanctuary {
     return speciesWithLocations;
   }
 
-  private void addSpeciesLocationsToMap(Housing location, List<UUID> speciesIsolationList,
-                                        List<UUID> speciesEnclosureList, Map<HousingType,
-          List<UUID>> speciesLocationMap){
-    if(location.getHousingType() == HousingType.ISOLATION){
-      speciesIsolationList.add(location.getId());
-      speciesLocationMap.put(location.getHousingType(), speciesIsolationList);
-    } else if(location.getHousingType() == HousingType.ENCLOSURE){
-      speciesEnclosureList.add(location.getId());
-      speciesLocationMap.put(location.getHousingType(), speciesEnclosureList);
-    }
-  }
-
   @Override
   public Map<HousingType, List<UUID>> getLocationsForASpecies(Species species)
-          throws IllegalArgumentException{
+          throws IllegalArgumentException {
     this.nullCheck(species, "Species");
     return this.getSpeciesWithLocations().get(species);
   }
@@ -505,9 +506,24 @@ public class JungleFriendsSanctuary implements Sanctuary {
           favFoodShoppingList.put(FavoriteFood.INSECTS, insects += monkey.getSize()
                   .getFoodRequired());
           break;
+
+        default: //No default case.
       }
     }
     return favFoodShoppingList;
+  }
+
+
+  private void addSpeciesLocationsToMap(Housing location, List<UUID> speciesIsolationList,
+                                        List<UUID> speciesEnclosureList, Map<HousingType,
+          List<UUID>> speciesLocationMap) {
+    if (location.getHousingType() == HousingType.ISOLATION) {
+      speciesIsolationList.add(location.getId());
+      speciesLocationMap.put(location.getHousingType(), speciesIsolationList);
+    } else if (location.getHousingType() == HousingType.ENCLOSURE) {
+      speciesEnclosureList.add(location.getId());
+      speciesLocationMap.put(location.getHousingType(), speciesEnclosureList);
+    }
   }
 
   private Isolation isIsolationCageAvailable(Primate monkey) {
@@ -535,11 +551,11 @@ public class JungleFriendsSanctuary implements Sanctuary {
   }
 
   private List<Housing> createLocations(int numOfEnclosures, int[] sizeOfEnclosures,
-                                       int numOfIsolationCages, int existingNumOfEnclosures,
-                                       int existingNumOfIsolationCages) {
+                                        int numOfIsolationCages, int existingNumOfEnclosures,
+                                        int existingNumOfIsolationCages) {
     List<Housing> locations = new ArrayList<>();
     for (int i = existingNumOfEnclosures; i < existingNumOfEnclosures + numOfEnclosures; i++) {
-      Housing enclosure = new Enclosure(sizeOfEnclosures[i-existingNumOfEnclosures]);
+      Housing enclosure = new Enclosure(sizeOfEnclosures[i - existingNumOfEnclosures]);
       locations.add(enclosure);
     }
     for (int i = existingNumOfIsolationCages; i < existingNumOfIsolationCages + numOfIsolationCages;
@@ -554,12 +570,12 @@ public class JungleFriendsSanctuary implements Sanctuary {
     List<Housing> locations = this.locations.stream()
             .filter(location -> !location.getResidents().isEmpty() && location.getResidents().get(0)
                     != null && location.getResidents().stream()
-                    .anyMatch(mon -> mon.getId().equals(monkey.getId())))
+                    .anyMatch(mon -> mon.equals(monkey)))
             .collect(Collectors.toList());
 
     if (locations.size() > 1) {
-      throw new IllegalStateException("Monkey " + monkey.getName() + "(" + monkey.getId() +
-              ") exists at more than one place");
+      throw new IllegalStateException("Monkey " + monkey.getName() + "(" + monkey.getId()
+              + ") exists at more than one place");
     }
     Housing currentLocation = locations.stream().findFirst().orElse(null);
 
@@ -573,23 +589,23 @@ public class JungleFriendsSanctuary implements Sanctuary {
   }
 
   private void checkIfUnhealthyMonkeyBeingMovedToEnclosure(Housing housing, Primate monkey)
-  throws IllegalStateException{
+          throws IllegalStateException {
     if (housing.getHousingType() == HousingType.ENCLOSURE
             && monkey.getHealthStatus() == HealthStatus.UNHEALTHY) {
-      throw new IllegalStateException("Only healthy monkeys can be added to Enclosures. Monkey " +
-              monkey.getName() + "(" + monkey.getId() + ") is UNHEALTHY.");
+      throw new IllegalStateException("Only healthy monkeys can be added to Enclosures. Monkey "
+              + monkey.getName() + "(" + monkey.getId() + ") is UNHEALTHY.");
     }
   }
 
-  private void checkIfMonkeyExitsInSanctuary(Primate monkey) throws IllegalArgumentException{
-    if (!this.getMonkeys().contains(monkey)){
-      throw new IllegalArgumentException("Monkey " + monkey.getName() + "(" + monkey.getId() +
-              ")does not exist in sanctuary");
+  private void checkIfMonkeyExitsInSanctuary(Primate monkey) throws IllegalArgumentException {
+    if (!this.getMonkeys().contains(monkey)) {
+      throw new IllegalArgumentException("Monkey " + monkey.getName() + "(" + monkey.getId()
+              + ")does not exist in sanctuary");
     }
   }
 
-  private void nullCheck(Object object, String value) throws IllegalArgumentException{
-    if(object == null) {
+  private void nullCheck(Object object, String value) throws IllegalArgumentException {
+    if (object == null) {
       throw new IllegalArgumentException(value + " cannot be null.");
     }
   }
